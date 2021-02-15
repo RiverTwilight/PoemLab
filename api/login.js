@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     const api = `https://api.weixin.qq.com/sns/jscode2session?appid=${process.env.APPID}&secret=${process.env.SECRET}&js_code=${jscode}&grant_type=authorization_code`;
     const code = await axios.get(api);
 
-    console(api, code);
+    console.log(api, code);
 
     res.json({
       body: code.data,

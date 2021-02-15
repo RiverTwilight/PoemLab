@@ -25,7 +25,9 @@ export default class CreateRoom extends Component<
 
   componentDidShow() {}
   componentDidHide() {}
-
+  componentDidMount() {
+    //TODO 检查是否登录
+  }
   handleCreateRoom = () => {
     const { title } = this.state;
     showLoading({
