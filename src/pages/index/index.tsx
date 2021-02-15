@@ -1,22 +1,29 @@
 import React, { Component } from "react";
 import { View, Text } from "@tarojs/components";
-import BottomNav from "../../components/BottomNav";
+import Layout from "../../components/Layout";
 import getAllRooms from "../../utils/getAllRooms";
-import createRoom from "../../utils/createRoom";
 import "./index.scss";
+import RoomItem from "../../components/RoomItem";
 
-export default class Index extends Component {
+export default class Index extends Component<any, {
+  roomList: any[]
+}> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      roomList: [],
+    };
+  }
   componentWillMount() {}
 
   async componentDidMount() {
     const roomList = await getAllRooms();
-    console.log(roomList);
-    // await createRoom("Roomfdasfd", {
-    //   owner: "Dsf"
-    // })
+    this.setState({
+      roomList,
+    });
     wx.getSetting({
       success: () => {
-        console.log('调用成功')
+        console.log("调用成功");
       },
       fail: () => {},
     });
@@ -27,14 +34,20 @@ export default class Index extends Component {
   componentDidShow() {}
   componentDidHide() {}
 
-  handleCreateRoom = () => {
-    
-  }
+
+  handleCreateRoom = () => {};
   render() {
+    const { roomList } = this.state;
     return (
-      <View className="index">
-        <Text>Hello wrld!</Text>
-      </View>
+      <Layout>
+        <View className="index">
+          <View className="roomList">
+            {roomList.map((config, index) => (
+              <RoomItem config={config} index={index} />
+            ))}
+          </View>
+        </View>
+      </Layout>
     );
   }
 }

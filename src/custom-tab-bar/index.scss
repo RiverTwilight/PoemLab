@@ -1,0 +1,39 @@
+.tabBar {
+  position: fixed;
+  bottom: 6px;
+  left: 6px;
+  right: 6px;
+  height: 67px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 12px;
+  border: 1px solid black;
+  border-radius: 20px;
+}
+
+.centerItem {
+  background: black;
+  flex: 0.5;
+  height: 52px;
+  border-radius: 10px;
+}
+
+.tabBarItem {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tabBarItem cover-image {
+  width: 24px;
+
+  height: 24px;
+}
+
+.tabBarItem cover-view {
+  font-size: 12px;
+}

@@ -6,7 +6,7 @@ export default async (page: number = 1) => {
       params: {
         lable: "RoomData",
         page,
-        access_token: "a0f599af6d8377b405abaa05a56c2fb9",
+        access_token: "626a77707d77fb8ed63b8e2ecaab344e",
         sort: "created",
         direction: "desc",
         per_page: 20,
