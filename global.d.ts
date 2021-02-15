@@ -24,7 +24,7 @@ declare namespace NodeJS {
   }
 }
 
-type OpenID = string
+type OpenID = string;
 
 interface roomData {
   roomName: string;

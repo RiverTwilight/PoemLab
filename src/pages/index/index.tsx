@@ -41,11 +41,18 @@ export default class Index extends Component<
   handleCreateRoom = () => {};
   render() {
     const { roomList } = this.state;
+    const today = new Date();
+    const greeting = [
+      ...Array(7).fill("早上好"),
+      ...Array(5).fill("中午好"),
+      ...Array(5).fill("下午好"),
+      ...Array(12).fill("晚上好"),
+    ][today.getHours()];
     return (
       <Layout>
         <View className="index">
           <View className="greetingBox">
-            <Text>Morning</Text>
+            <Text>{greeting} ，{}</Text>
           </View>
           <View className="roomList">
             {roomList.map((config, index) => (

@@ -16,7 +16,7 @@ const list = [
     text: "首页",
   },
   {
-    pagePath: "/pages/room/index",
+    pagePath: "/pages/createRoom/index",
     className: "centerItem",
     icon: <PlusIcon />,
     selectedIcon: <PlusIcon />
@@ -45,7 +45,7 @@ const TabBarItem = ({
       data-path={item.pagePath}
       key={item.text}
     >
-      {item.icon}
+      {item.icon && item.icon}
       <CoverView
         style={{
           color: isSelected ? "rgba(0, 162, 0, 1)" : "rgba(0, 0, 0, 0.6)",
@@ -105,7 +105,11 @@ class CustomTabBar extends React.Component {
               item={item}
               index={index}
               isSelected={isSelected}
-              handleClick={(item, index) => {}}
+              handleClick={(item, index) => {
+                switchTab({
+                  url: item.pagePath
+                })
+              }}
             />
           );
         })}

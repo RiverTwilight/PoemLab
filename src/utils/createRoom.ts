@@ -15,8 +15,13 @@ export default async (
       body: JSON.stringify(body),
     });
     console.log(response);
-    return response.data
+    return {
+      data: response.data
+    }
   } catch (error) {
     console.error(error);
+    return {
+      code: 400
+    }
   }
 };
