@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text } from "@tarojs/components";
+import { View, Text, Button } from "@tarojs/components";
 import Layout from "../../components/Layout";
 import getAllRooms from "../../utils/getAllRooms";
 import "./index.scss";
@@ -20,16 +20,10 @@ export default class Index extends Component<
   componentWillMount() {}
 
   async componentDidMount() {
-    login();
+    // login();
     const roomList = await getAllRooms();
     this.setState({
       roomList,
-    });
-    wx.getSetting({
-      success: () => {
-        console.log("调用成功");
-      },
-      fail: () => {},
     });
   }
 
@@ -54,6 +48,7 @@ export default class Index extends Component<
           <View className="greetingBox">
             <Text>{greeting} ，{}</Text>
           </View>
+          <Button openType="getUserInfo" onClick={login}>授权</Button>
           <View className="roomList">
             {roomList.map((config, index) => (
               <RoomItem config={config} index={index} />
