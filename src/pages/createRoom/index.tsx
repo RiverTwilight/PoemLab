@@ -4,13 +4,10 @@ import Layout from "../../components/Layout";
 import getAllRooms from "../../utils/getAllRooms";
 import "./index.scss";
 import RoomItem from "../../components/RoomItem";
-import login from "../../utils/login";
-export default class Index extends Component<
-  any,
-  {
-    roomList: any[];
-  }
-> {
+
+export default class Index extends Component<any, {
+  roomList: any[]
+}> {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +17,6 @@ export default class Index extends Component<
   componentWillMount() {}
 
   async componentDidMount() {
-    login();
     const roomList = await getAllRooms();
     this.setState({
       roomList,
@@ -38,15 +34,13 @@ export default class Index extends Component<
   componentDidShow() {}
   componentDidHide() {}
 
+
   handleCreateRoom = () => {};
   render() {
     const { roomList } = this.state;
     return (
       <Layout>
         <View className="index">
-          <View className="greetingBox">
-            <Text>Morning</Text>
-          </View>
           <View className="roomList">
             {roomList.map((config, index) => (
               <RoomItem config={config} index={index} />

@@ -7,6 +7,7 @@ import {
   CoverImage,
 } from "@tarojs/components";
 import { switchTab } from "@tarojs/taro";
+import PlusIcon from "../public/icons/Plus.svg"
 import "./index.scss";
 
 const list = [
@@ -16,7 +17,9 @@ const list = [
   },
   {
     pagePath: "/pages/room/index",
-    className: "centerItem"
+    className: "centerItem",
+    icon: <PlusIcon />,
+    selectedIcon: <PlusIcon />
   },
   {
     pagePath: "/pages/me/index",
@@ -42,7 +45,7 @@ const TabBarItem = ({
       data-path={item.pagePath}
       key={item.text}
     >
-      <CoverImage src={isSelected ? item.selectedIconPath : item.iconPath} />
+      {item.icon}
       <CoverView
         style={{
           color: isSelected ? "rgba(0, 162, 0, 1)" : "rgba(0, 0, 0, 0.6)",

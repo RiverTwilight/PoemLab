@@ -1,5 +1,5 @@
 export default {
-  pages: ["pages/index/index", "pages/me/index"],
+  pages: ["pages/index/index", "pages/me/index", "pages/room/index"],
   window: {
     backgroundTextStyle: "light",
     backgroundColor: "#F6EFEF",
