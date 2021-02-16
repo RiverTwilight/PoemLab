@@ -39,3 +39,11 @@ interface userData {
   OpenID: string;
   nickname: string;
 }
+
+interface IRoomConfig {
+  roomName: string;
+  memberNum: number;
+  posts: {
+    author: string;
+  }[];
+}

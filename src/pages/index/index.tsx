@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, Button } from "@tarojs/components";
+import { View, Text } from "@tarojs/components";
 import Layout from "../../components/Layout";
 import getUserInfo from "../../utils/getUserInfo";
-import "./index.scss";
-import RoomItem from "../../components/RoomItem";
 import login from "../../utils/login";
+import RoomItem from "../../components/RoomItem";
 import Taro, { getStorageSync } from "@tarojs/taro";
+import "./index.scss";
 
 export default class Index extends Component<
   any,
@@ -23,7 +23,6 @@ export default class Index extends Component<
       },
     };
   }
-  componentWillMount() {}
 
   /**
    * 获取服务器上的用户信息
@@ -47,22 +46,16 @@ export default class Index extends Component<
     const ins = this;
     Taro.checkSession({
       success() {
-        console.log('登录未过期')
+        console.log("登录未过期");
         ins.fetchUserInfo();
       },
       fail() {
-        console.log('登录已过期')
+        console.log("登录已过期");
         login(ins.fetchUserInfo);
       },
     });
   }
 
-  componentWillUnmount() {}
-
-  componentDidShow() {}
-  componentDidHide() {}
-
-  handleCreateRoom = () => {};
   render() {
     const { roomList, userInfo } = this.state;
     const today = new Date();
@@ -81,9 +74,13 @@ export default class Index extends Component<
             </Text>
           </View>
           <View className="roomList">
-            {roomList.map((config, index) => (
-              <RoomItem config={config} index={index} />
-            ))}
+            {roomList.length ? (
+              roomList.map((config, index) => (
+                <RoomItem config={config} index={index} />
+              ))
+            ) : (
+              <View className="centerText">点击下方按钮创建房间</View>
+            )}
           </View>
         </View>
       </Layout>

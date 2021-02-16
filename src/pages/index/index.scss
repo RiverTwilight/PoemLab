@@ -2,8 +2,8 @@
   padding: 0px 24px;
 }
 .greetingBox {
-  padding: 5px 30px;
-
+  height: 90px;
+  padding: 0px 24px;
   font-family: Simonetta;
   font-style: normal;
   font-weight: normal;
@@ -11,4 +11,7 @@
   line-height: 45px;
 
   color: #000000;
+}
+.centerText{
+  color: #bbb5b5
 }

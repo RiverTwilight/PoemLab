@@ -1,4 +1,4 @@
-import { request } from "@tarojs/taro";
+import { request, hideLoading, showLoading } from "@tarojs/taro";
 
 interface IResponse {
   // 用户唯一标识
@@ -12,6 +12,9 @@ interface IReturn extends IResponse {
 }
 
 export default async (OpenID: string): Promise<IReturn | undefined> => {
+  showLoading({
+    title: "获取房间列表",
+  });
   try {
     const response = await request({
       url: `https://poem-lab.vercel.app/api/userInfo?openid=${OpenID}`,
@@ -19,5 +22,7 @@ export default async (OpenID: string): Promise<IReturn | undefined> => {
     return response.data;
   } catch (error) {
     console.error(error);
+  } finally {
+    hideLoading();
   }
 };
