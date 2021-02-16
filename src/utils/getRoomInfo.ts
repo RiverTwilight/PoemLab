@@ -1,12 +1,12 @@
-import axios from "./axios";
+import { request } from "@tarojs/taro";
 
-export default async (IssueID: number): Promise<roomData | undefined> => {
+export default async (RoomId: number): Promise<roomData | undefined> => {
   try {
-    const response = await axios.get(
-      `/rivertwilight/poem-bank/issues/${IssueID}`
-    );
+    const response = await request({
+      url: `https://poem-lab.vercel.app/api/roomInfo/roomId=${RoomId}`,
+    });
     console.log(response);
-    return JSON.parse(response.data.body);
+    return response.data;
   } catch (error) {
     console.error(error);
   }

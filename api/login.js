@@ -12,7 +12,7 @@ const createUser = async (originMap, openid) => {
   console.log("Start create ");
   // 创建用户信息表
   const create = await axios({
-    url: `https://gitee.com/api/v5/repos/rivertiwlight/poem-bank/issues`,
+    url: `https://gitee.com/api/v5/repos/rivertwilight/poem-bank/issues`,
     method: "post",
     adapter,
     data: {
@@ -53,28 +53,28 @@ const login = async (jscode) => {
 
     const { openid, session_key } = code.data;
 
-    console.log(`✔ 1.Got Wx's auth succcessfully (openid: ${openid})`);
+    // console.log(`✔ 1.Got Wx's auth succcessfully (openid: ${openid})`);
 
-    const rowUserDataMap = await axios.get(
-      `https://gitee.com/api/v5/repos/rivertwilight/poem-bank/issues/${MAP_ISSUEID}`,
-      { adapter }
-    );
+    // const rowUserDataMap = await axios.get(
+    //   `https://gitee.com/api/v5/repos/rivertwilight/poem-bank/issues/${MAP_ISSUEID}`,
+    //   { adapter }
+    // );
 
-    console.log(rowUserDataMap);
+    // console.log(rowUserDataMap);
 
-    const userDataMap = JSON.parse(rowUserDataMap.data.body);
+    // const userDataMap = {} || JSON.parse(rowUserDataMap.data.body);
 
-    console.log(
-      "✔ 2.Got UserData Map from gitee issue succcessfully",
-      userDataMap
-    );
+    // console.log(
+    //   "✔ 2.Got UserData Map from gitee issue succcessfully",
+    //   userDataMap
+    // );
 
-    const issueid = await createUser(userDataMap, openid);
+    // const issueid = await createUser(userDataMap, openid);
 
-    console.log(
-      `✔ 3.Create/Get UserData from gitee issue succcessfully (${issueid})`,
-      userDataMap[openid]
-    );
+    // console.log(
+    //   `✔ 3.Create/Get UserData from gitee issue succcessfully (${issueid})`,
+    //   userDataMap[openid]
+    // );
 
     if (openid && session_key) {
       return {
@@ -83,8 +83,7 @@ const login = async (jscode) => {
           msg: "login successfully",
         },
         openid,
-        session_key,
-        issueid,
+        session_key
       };
     }
     return {
@@ -106,5 +105,6 @@ const login = async (jscode) => {
 export { login };
 export default async (req, res) => {
   const { jscode } = req.query;
-  res.json(login(jscode));
+  const result = await login(jscode)
+  res.json(result);
 };

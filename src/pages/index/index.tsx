@@ -39,7 +39,7 @@ export default class Index extends Component<
       },
     });
     this.setState({
-      roomList: [...userData?.joinedRoom],
+      roomList: [...userData?.ownRoom],
     });
   };
 
@@ -51,6 +51,7 @@ export default class Index extends Component<
         ins.fetchUserInfo();
       },
       fail() {
+        console.log('登录已过期')
         login(ins.fetchUserInfo);
       },
     });

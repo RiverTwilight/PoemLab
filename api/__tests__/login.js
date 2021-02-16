@@ -3,7 +3,8 @@ const { login } = require("../login");
 jest.setTimeout(60000);
 
 test("Login ( Existed User )", async (done) => {
-  const res = await login("09391LFa1ypswA0dlnGa1uy5pH391LFE");
+  const res = await login("013LGOkl2JSEw64s8Gkl2m8CIQ1LGOkO");
+  console.log(res);
   expect(res.openid).toBeDefined();
 });
 
