@@ -1,22 +1,34 @@
 import React, { Component } from 'react'
+import { getUserInfo, authorize, getSetting } from "@tarojs/taro"
 import { View, Text } from '@tarojs/components'
 import './index.scss'
 
-// TODO 动态转发消息https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share/updatable-message.html
+export default class Me extends Component {
 
-export default class Index extends Component {
+  componentWillMount() { }
 
-  componentWillMount () { }
+  componentDidMount() {
 
-  componentDidMount () { }
+    Taro.getSetting({
+      success: function (res) {
+        if (!res.authSetting['scope.record']) {
+          Taro.authorize({
+            scope: 'scope.userInfo',
+            success: function () {
+            }
+          })
+        }
+      }
+    })
+  }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () { }
+  componentDidShow() { }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
-  render () {
+  render() {
     return (
       <View className='index'>
         <Text>我的</Text>

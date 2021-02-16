@@ -4,6 +4,7 @@ export default {
     "pages/me/index",
     "pages/room/index",
     "pages/createRoom/index",
+    'pages/login/index'
   ],
   window: {
     backgroundTextStyle: "light",

@@ -3,6 +3,7 @@
   "projectname": "PoemLab",
   "description": "诗歌实验室",
   "appid": "wx970880cfb4dc6296",
+  "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
     "urlCheck": true,
     "es6": false,
@@ -41,5 +42,6 @@
   "compileType": "miniprogram",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
   "condition": {}
 }

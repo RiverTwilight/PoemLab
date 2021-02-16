@@ -12,15 +12,15 @@ declare module "*.styl";
 declare namespace NodeJS {
   interface ProcessEnv {
     TARO_ENV:
-      | "weapp"
-      | "swan"
-      | "alipay"
-      | "h5"
-      | "rn"
-      | "tt"
-      | "quickapp"
-      | "qq"
-      | "jd";
+    | "weapp"
+    | "swan"
+    | "alipay"
+    | "h5"
+    | "rn"
+    | "tt"
+    | "quickapp"
+    | "qq"
+    | "jd";
   }
 }
 
@@ -45,5 +45,9 @@ interface IRoomConfig {
   memberNum: number;
   posts: {
     author: string;
+    content: {
+      type: 1 | 2,
+      text: string
+    }[]
   }[];
 }

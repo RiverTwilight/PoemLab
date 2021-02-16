@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { View, Text } from "@tarojs/components";
+import { View, Text, Button } from "@tarojs/components";
 import Layout from "../../components/Layout";
 import getUserInfo from "../../utils/getUserInfo";
 import login from "../../utils/login";
 import RoomItem from "../../components/RoomItem";
-import Taro, { getStorageSync } from "@tarojs/taro";
+import Taro, { getStorageSync, cloud, navigateTo } from "@tarojs/taro";
 import "./index.scss";
+
+cloud.init()
 
 export default class Index extends Component<
   any,
@@ -13,7 +15,7 @@ export default class Index extends Component<
     roomList: any[];
     userInfo: any;
   }
-> {
+  > {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,16 +44,22 @@ export default class Index extends Component<
     });
   };
 
-  async componentDidMount() {
+  async componentDidShow () {
+    console.log('onShow')
     const ins = this;
+    cloud.init({
+      env: 'poem-lab-1grq2bv3285feea1'
+    })
     Taro.checkSession({
       success() {
         console.log("登录未过期");
         ins.fetchUserInfo();
       },
       fail() {
-        console.log("登录已过期");
-        login(ins.fetchUserInfo);
+        console.log("未登录");
+        navigateTo({
+          url: '/pages/login/index'
+        })
       },
     });
   }
@@ -68,6 +76,14 @@ export default class Index extends Component<
     return (
       <Layout>
         <View className="index">
+          <Button onClick={() => {
+            navigateTo({
+              url: "/pages/room/index?roomId=b00064a7602bbe35054e9eb608555266",
+              success(res) {
+
+              }
+            })
+          }}>asf</Button>
           <View className="greetingBox">
             <Text>
               {greeting} ，{userInfo.nickName}
@@ -79,8 +95,8 @@ export default class Index extends Component<
                 <RoomItem config={config} index={index} />
               ))
             ) : (
-              <View className="centerText">点击下方按钮创建房间</View>
-            )}
+                <View className="centerText">点击下方按钮创建房间</View>
+              )}
           </View>
         </View>
       </Layout>

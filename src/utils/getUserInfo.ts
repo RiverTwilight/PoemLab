@@ -1,4 +1,4 @@
-import { request, hideLoading, showLoading } from "@tarojs/taro";
+import { cloud, hideLoading, showLoading } from "@tarojs/taro";
 
 interface IResponse {
   // 用户唯一标识
