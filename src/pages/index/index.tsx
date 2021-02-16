@@ -1,29 +1,58 @@
 import React, { Component } from "react";
 import { View, Text, Button } from "@tarojs/components";
 import Layout from "../../components/Layout";
-import getAllRooms from "../../utils/getAllRooms";
+import getUserInfo from "../../utils/getUserInfo";
 import "./index.scss";
 import RoomItem from "../../components/RoomItem";
 import login from "../../utils/login";
+import Taro, { getStorageSync } from "@tarojs/taro";
+
 export default class Index extends Component<
   any,
   {
     roomList: any[];
+    userInfo: any;
   }
 > {
   constructor(props) {
     super(props);
     this.state = {
       roomList: [],
+      userInfo: {
+        nickName: "游客",
+      },
     };
   }
   componentWillMount() {}
 
-  async componentDidMount() {
-    // login();
-    const roomList = await getAllRooms();
+  /**
+   * 获取服务器上的用户信息
+   */
+  fetchUserInfo = async () => {
+    const { openid } = getStorageSync("login_session");
+    const userData = await getUserInfo(openid);
+    Taro.getUserInfo({
+      success(res) {
+        this.setState({
+          userInfo: res.userInfo,
+        });
+      },
+    });
     this.setState({
-      roomList,
+      roomList: [...userData?.joinedRoom],
+    });
+  };
+
+  async componentDidMount() {
+    const ins = this;
+    Taro.checkSession({
+      success() {
+        console.log('登录未过期')
+        ins.fetchUserInfo();
+      },
+      fail() {
+        login(ins.fetchUserInfo);
+      },
     });
   }
 
@@ -34,7 +63,7 @@ export default class Index extends Component<
 
   handleCreateRoom = () => {};
   render() {
-    const { roomList } = this.state;
+    const { roomList, userInfo } = this.state;
     const today = new Date();
     const greeting = [
       ...Array(7).fill("早上好"),
@@ -46,9 +75,10 @@ export default class Index extends Component<
       <Layout>
         <View className="index">
           <View className="greetingBox">
-            <Text>{greeting} ，{}</Text>
+            <Text>
+              {greeting} ，{userInfo.nickName}
+            </Text>
           </View>
-          <Button openType="getUserInfo" onClick={login}>授权</Button>
           <View className="roomList">
             {roomList.map((config, index) => (
               <RoomItem config={config} index={index} />
