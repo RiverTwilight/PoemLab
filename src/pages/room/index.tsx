@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, Button, Input } from '@tarojs/components'
+import { View, Text, Button, Input, Checkbox, Label } from '@tarojs/components'
 import getRoomInfo from "../../utils/getRoomInfo"
+import updateRoom from "../../utils/updateRoom"
 import './index.scss'
-import { cloud, getUserInfo, getStorageSync } from "@tarojs/taro";
+import { cloud, getStorageSync, getSystemInfo } from "@tarojs/taro";
 // TODO 动态转发消息https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share/updatable-message.html
 
 cloud.init()
@@ -27,11 +28,27 @@ const PostItem = ({ post }: {
 }
 
 export default class Index extends Component<any, {
-  roomInfo?: IRoomConfig
+  roomInfo?: IRoomConfig;
+  safeHeight: number;
+  text?: string;
+  type?: 1 | 2;
+  list: any[]
 }> {
   constructor(props) {
     super(props);
     this.state = {
+      safeHeight: 10,
+      list: [
+        {
+          value: 1,
+          text: '每当...',
+          checked: true
+        }, {
+          value: 2,
+          text: '就会...',
+          checked: false
+        },
+      ]
     };
   }
 
@@ -48,15 +65,33 @@ export default class Index extends Component<any, {
           roomInfo: roomInfo.data[0]
         })
       })
-
     }
+    getSystemInfo({
+      success: (res) => {
+        let blackBarHeight = res.screenHeight - res.safeArea.bottom
+        this.setState({
+          safeHeight: blackBarHeight === 0 ? 10 : blackBarHeight
+        })
+      }
+    })
   }
   componentDidMount() {
 
   }
 
   handleSend = () => {
-
+    const { roomInfo } = this.state
+    roomInfo && updateRoom(roomInfo?._id, {
+      author: "",
+      content: [
+        {
+          type: 0,
+          text: ''
+        }
+      ]
+    }, () => {
+      console.log('Upload successfully')
+    })
   }
   generate = () => {
     let up = [];
@@ -94,7 +129,7 @@ export default class Index extends Component<any, {
   }
 
   render() {
-    const { roomInfo } = this.state;
+    const { roomInfo, safeHeight, list } = this.state;
     return (
       <View className='index'>
         {roomInfo && (
@@ -109,6 +144,15 @@ export default class Index extends Component<any, {
               <Input type='text' placeholder='最大输入长度为 10' />
               <Button className="send" onClick={this.handleSend}> </Button>
             </View>
+            <View className="typeBox">
+              {list.map((item, i) => {
+                return (
+                  <Label className='checkbox-list__label' for={i} key={i}>
+                    <Checkbox className='checkbox-list__checkbox' value={item.value} checked={item.checked}>{item.text}</Checkbox>
+                  </Label>
+                )
+              })}
+            </View>
             <View className="generator">
               <View className="main">
                 {roomInfo && this.generate().map(para => (
@@ -116,13 +160,12 @@ export default class Index extends Component<any, {
                 ))}
               </View>
             </View>
-            <View className="bottomMenu">
-              <Button className="primary" onClick={this.handleInvite}>邀请</Button>
+            <View style={{ paddingBottom: safeHeight }} className="bottomMenu">
+              <Button className="primary" openType="share" >邀请</Button>
               <Button className="secondary" openType="share" >分享</Button>
             </View>
           </View>
         )}
-
       </View>
     )
   }

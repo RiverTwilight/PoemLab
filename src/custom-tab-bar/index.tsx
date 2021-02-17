@@ -7,7 +7,6 @@ import {
   CoverImage,
 } from "@tarojs/components";
 import { switchTab } from "@tarojs/taro";
-import PlusIcon from "../public/icons/Plus.svg"
 import "./index.scss";
 
 const list = [
@@ -17,9 +16,7 @@ const list = [
   },
   {
     pagePath: "/pages/createRoom/index",
-    className: "centerItem",
-    icon: <PlusIcon />,
-    selectedIcon: <PlusIcon />
+    className: "centerItem"
   },
   {
     pagePath: "/pages/me/index",
