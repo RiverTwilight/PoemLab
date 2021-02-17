@@ -1,0 +1,24 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/room/index",
+          "pathName": "pages/room/index",
+          "query": "roomId=b00064a7602bbe35054e9eb608555266",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

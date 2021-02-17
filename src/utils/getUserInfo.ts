@@ -1,28 +1,25 @@
-import { cloud, hideLoading, showLoading } from "@tarojs/taro";
+import { cloud } from "@tarojs/taro";
 
-interface IResponse {
-  // 用户唯一标识
-  OpenID: string;
-  ownRoom: string[];
-  joinedRoom: string[];
-}
+const db = cloud.database()  //获取数据库的引用
+const _ = db.command     //获取数据库查询及更新指令
 
-interface IReturn extends IResponse {
-  OpenID: string;
-}
-
-export default async (OpenID: string): Promise<IReturn | undefined> => {
-  showLoading({
-    title: "获取房间列表",
-  });
+// Lookup不能再
+export default async (openid: string): Promise<any>=> {
   try {
-    const response = await request({
-      url: `https://poem-lab.vercel.app/api/userInfo?openid=${OpenID}`,
+    const data = db.collection("user").aggregate().match({
+      _openid: openid
+    }).addFields({
+      ownRoom: _
+    }).lookup({
+      from: "room",
+      localField: "_openid",
+      foreignField: "owner",
+      as: "ownRoom"
+    }).limit(1).end().then(res=>{
+      console.log(res)
     });
-    return response.data;
+    return data;
   } catch (error) {
     console.error(error);
-  } finally {
-    hideLoading();
   }
 };

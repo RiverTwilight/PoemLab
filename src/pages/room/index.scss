@@ -1,0 +1,85 @@
+.index {
+  min-height: 100vh;
+}
+
+@mixin fullWith() {
+  margin: auto -24rpx;
+  background: #Fff;
+}
+
+.description {
+  @include fullWith();
+  max-height: 10vh;
+}
+
+.bottomMenu {
+  position: fixed;
+  bottom: 0;
+  height: 90px;
+  flex: 1;
+  right: 0;
+  left: 0;
+  justify-content: center;
+  display: flex;
+  padding-bottom: constant(safe-area-inset-bottom);
+  /*兼容 IOS<11.2*/
+  padding-bottom: env(safe-area-inset-bottom);
+  /*兼容 IOS>11.2*/
+}
+
+.index {
+  padding: 0 24px;
+}
+
+.inputBox {
+  border-radius: 3px;
+  height: 90px;
+  padding: 5px 2px;
+  display: flex;
+
+  .send {
+    border-radius: 50%;
+    height: 90px;
+    width: 90px;
+    background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cpath d='M27 9.00061L13 23L6 16.0006' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E %3C/svg%3E ");
+  }
+
+  &>Input {
+    height: 100%;
+    background: #fff;
+    line-height: 50px;
+    padding: auto 3px;
+    font-size: 35px;
+    flex: 0.9
+  }
+}
+
+.generator {
+  @include fullWith();
+  height: 50vh;
+  margin-top: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+
+  &>main {
+    text-align: center;
+  }
+}
+
+.bottomMenu Button {
+  flex: 0.5;
+  height: 100%;
+  margin: 2px;
+}
+
+Button.primary {
+  background: #000;
+  color: #fff;
+}
+
+Button.secondary {
+  background: #fff;
+  color: #000;
+  border: 1px solid black;
+}

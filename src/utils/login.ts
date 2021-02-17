@@ -22,8 +22,8 @@ export default function login(onSuccess: () => void) {
             jscode: res.code
           }
         }).then((res) => {
-          console.log(res)
-          const { openid, session_key } = res
+          console.log(res);
+          const { openid, session_key } = res.result
           setStorageSync('login_session', {
             openid
           })

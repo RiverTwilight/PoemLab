@@ -1,14 +1,21 @@
 import { Component } from "react";
+import { cloud } from "@tarojs/taro"
 import "./app.scss";
 
 class App extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
 
-  componentDidShow() {}
+  componentDidShow() { }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
-  componentDidCatchError() {}
+  onLaunch = () => {
+    cloud.init({
+      env: cloud.DYNAMIC_CURRENT_ENV
+    })
+  }
+
+  componentDidCatchError() { }
 
   // this.props.children 是将要会渲染的页面
   render() {

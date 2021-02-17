@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import { View, Text, Button } from "@tarojs/components";
 import Layout from "../../components/Layout";
-import getUserInfo from "../../utils/getUserInfo";
-import login from "../../utils/login";
 import RoomItem from "../../components/RoomItem";
-import Taro, { getStorageSync, cloud, navigateTo } from "@tarojs/taro";
+import Taro, { cloud, navigateTo, showLoading, hideLoading } from "@tarojs/taro";
 import "./index.scss";
-
-cloud.init()
 
 export default class Index extends Component<
   any,
@@ -30,21 +26,25 @@ export default class Index extends Component<
    * 获取服务器上的用户信息
    */
   fetchUserInfo = async () => {
-    const { openid } = getStorageSync("login_session");
-    const userData = await getUserInfo(openid);
-    Taro.getUserInfo({
-      success(res) {
-        this.setState({
-          userInfo: res.userInfo,
-        });
+    showLoading({
+      title: "正在获取房间列表"
+    })
+    cloud.callFunction({
+      name: "fetchUserInfo",
+      success: (res) => {
+        if (res.result.list.length) {
+          this.setState({
+            roomList: [...res.result.list[0].ownRoom],
+          });
+        }
       },
-    });
-    this.setState({
-      roomList: [...userData?.ownRoom],
-    });
-  };
+      complete: () => {
+        hideLoading()
+      }
+    })
+  }
 
-  async componentDidShow () {
+  async componentDidShow() {
     console.log('onShow')
     const ins = this;
     cloud.init({

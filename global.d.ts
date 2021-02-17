@@ -36,13 +36,18 @@ interface roomData {
 }
 
 interface userData {
-  OpenID: string;
+  openid: string;
   nickname: string;
+  ownRoom: {
+    roomId: string
+  }[]
 }
 
 interface IRoomConfig {
+  _id: string;
   roomName: string;
   memberNum: number;
+  description: string;
   posts: {
     author: string;
     content: {

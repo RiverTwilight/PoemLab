@@ -10,10 +10,19 @@ export default function RoomItem({
   config: IRoomConfig
   index: number;
 }) {
-  const { roomName, memberNum, posts } = config;
+  const { roomName, memberNum, posts, _id } = config;
+  const handleClick = () => {
+    navigateTo({
+      url: `/pages/room/index?roomId=${_id}`,
+      success(res) {
+
+      }
+    })
+  }
   return (
-    <View className="roomItem">
+    <View className="roomItem" onClick={handleClick}>
       <Text className="">{roomName}</Text>
+      <View></View>
     </View>
   );
 }
