@@ -2,15 +2,19 @@
   min-height: 100vh;
 }
 
-@mixin fullWith() {
+@mixin shrinkWidth() {
+  margin: 0 24rpx;
+}
+
+@mixin fullWidth() {
   margin: auto -24rpx;
   background: #Fff;
 }
 
 .description {
-  @include fullWith();
   max-height: 10vh;
   padding: 13px;
+  background: #fff
 }
 
 .bottomMenu {
@@ -31,23 +35,20 @@
   /*兼容 IOS>11.2*/
 }
 
-.index {
-  padding: 0 24px;
-}
-
 .inputBox {
   border-radius: 3px;
   height: 90px;
-  padding: 5px 2px;
+  padding: 5px 7px;
   display: flex;
 
   .send {
     border-radius: 50%;
     height: 90px;
     width: 90px;
-    background-position: center;
+    background: #Fff;
     background-repeat: no-repeat;
     background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cpath d='M27 9.00061L13 23L6 16.0006' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E %3C/svg%3E ");
+    background-position: center;
   }
 
   &>Input {
@@ -61,7 +62,7 @@
 }
 
 .generator {
-  @include fullWith();
+  @include fullWidth();
   height: 50vh;
   margin-top: 10px;
   padding: 10px;
@@ -79,6 +80,10 @@
   margin: 2px;
 }
 
+.form {
+  @include shrinkWidth()
+}
+
 Button.primary {
   background: #000;
   color: #fff;
@@ -88,4 +93,37 @@ Button.secondary {
   background: #fff;
   color: #000;
   border: 1px solid black;
+}
+
+.posts {
+  margin-top: 11px;
+  height: 200px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 100%;
+  background: transparent;
+  margin-bottom: 15px;
+
+  &>.postScrollBox {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    float: left; // 使其脱离文档流 宽度为所有字元素的和
+    min-width: 100%;
+
+    &>.postItem {
+      padding: 5rpx 15px;
+      background: #Fff;
+      border-radius: 3rpx;
+      margin-right: 10px;
+      width: 300px;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      flex: 3;
+      -webkit-align-items: center;
+      -ms-flex-align: center;
+      align-items: center;
+    }
+  }
 }

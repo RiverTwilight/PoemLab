@@ -43,16 +43,20 @@ interface userData {
   }[]
 }
 
-interface IRoomConfig {
+interface IRoomPost {
+  // 所有者
+  _openid: string;
+  content: {
+    type: 1 | 2,
+    text: string
+  }[]
+}
+
+interface IRoomConfig extends IRoomPost {
   _id: string;
   roomName: string;
   memberNum: number;
   description: string;
-  posts: {
-    author: string;
-    content: {
-      type: 1 | 2,
-      text: string
-    }[]
-  }[];
+  posts: IRoomPost[]
 }
+

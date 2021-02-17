@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { View, Text, Button, Input, Checkbox, Label } from '@tarojs/components'
 import getRoomInfo from "../../utils/getRoomInfo"
 import updateRoom from "../../utils/updateRoom"
 import './index.scss'
-import { cloud, getStorageSync, getSystemInfo } from "@tarojs/taro";
+import { cloud, getStorageSync, getSystemInfo, showToast } from "@tarojs/taro";
 // TODO 动态转发消息https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share/updatable-message.html
 
 cloud.init()
@@ -20,35 +20,65 @@ const PostItem = ({ post }: {
     <View>{text}</View>
   )
   return (
-    <View>
+    <View className="postItem">
       <View className="authorBox">{post.author}</View>
       {post.content.map((content) => <Item key={content.text} text={content.text} />)}
     </View>
   )
 }
 
+const FormBox = ({ onConfirm, index }) => {
+  const post = window.posts[index]
+
+  const setType = (type) => {
+    post.type = type;
+    setActive(type)
+  }
+
+  const [active, setActive] = useState(1)
+
+  return (
+    <View>
+      <View className="inputBox">
+        <Input onInput={(e) => {
+          post.text = e.detail.value
+        }} value={post.text} confirmType="done" type='text' placeholder='最大输入长度为 10' />
+        <Button style={{
+          visibility: index === 0 ? "visible" : "hidden"
+        }} className="send" onClick={onConfirm}> </Button>
+      </View>
+      <View className="typeBox">
+        <Label className='checkbox-list__label'>
+          <Checkbox onClick={() => setType(1)} className='checkbox-list__checkbox' value="1" checked={active === 1}>每当</Checkbox>
+        </Label>
+        <Label className='checkbox-list__label'>
+          <Checkbox onClick={() => setType(2)} className='checkbox-list__checkbox' value="2" checked={active === 2}>就会</Checkbox>
+        </Label>
+      </View>
+    </View>
+  )
+}
+
+window.posts = [{
+  text: "",
+  type: 1,
+}];
+
 export default class Index extends Component<any, {
   roomInfo?: IRoomConfig;
   safeHeight: number;
-  text?: string;
-  type?: 1 | 2;
-  list: any[]
+  posts: {
+    text: string;
+    type: 1 | 2;
+  }[];
+  result: string[]
 }> {
   constructor(props) {
     super(props);
     this.state = {
       safeHeight: 10,
-      list: [
-        {
-          value: 1,
-          text: '每当...',
-          checked: true
-        }, {
-          value: 2,
-          text: '就会...',
-          checked: false
-        },
-      ]
+      result: [],
+      posts: window.posts
     };
   }
 
@@ -62,7 +92,8 @@ export default class Index extends Component<any, {
           console.log('Owned Room')
         }
         this.setState({
-          roomInfo: roomInfo.data[0]
+          roomInfo: roomInfo.data[0],
+          result: this.generate(roomInfo.data[0].posts)
         })
       })
     }
@@ -79,24 +110,40 @@ export default class Index extends Component<any, {
 
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextState.roomInfo !== this.state.roomInfo || nextState.type !== this.state.type
+  // }
+
   handleSend = () => {
-    const { roomInfo } = this.state
-    roomInfo && updateRoom(roomInfo?._id, {
-      author: "",
-      content: [
-        {
-          type: 0,
-          text: ''
-        }
-      ]
-    }, () => {
-      console.log('Upload successfully')
-    })
+    const { roomInfo, posts } = this.state;
+    const newPost = {
+      _openid: "sadffasdfsdfasdfasdf",
+      content: posts
+    }
+
+    if (posts[0].text !== "") {
+      roomInfo && updateRoom(roomInfo?._id, newPost, () => {
+        showToast({
+          title: '已添加',
+          icon: 'success',
+          duration: 2000
+        })
+        roomInfo.posts = [...roomInfo.posts, newPost]
+        this.setState({
+          posts: [{
+            text: '',
+            type: 1
+          }],
+          roomInfo,
+          result: this.generate(roomInfo.posts)
+        })
+      })
+    }
   }
-  generate = () => {
+
+  generate = (posts) => {
     let up = [];
     let down: string[] = [];
-    const { posts } = this.state.roomInfo
     posts.map((post) => {
       post.content.map((sen) => {
         switch (sen.type) {
@@ -108,9 +155,11 @@ export default class Index extends Component<any, {
     console.log(up, down);
     let final = [...down]
     up.map((sens, index) => {
-      let random = getRandom(0, down.length - 1)
-      final[index] = `${sens},${down[random]}`;
-      down.splice(random, 1)
+      let random = getRandom(0, down.length - 1);
+      if (down[random]) {
+        final[index] = `${sens},${down[random]}`;
+        down.splice(random, 1)
+      }
     })
     console.log(final)
     return final
@@ -128,8 +177,20 @@ export default class Index extends Component<any, {
     }[mode]
   }
 
+  handleAdd = () => {
+    const { posts } = this.state;
+    window.posts = [...posts, {
+      text: '',
+      type: 1
+    }];
+    this.setState({
+      posts: window.posts
+    })
+  }
+
   render() {
-    const { roomInfo, safeHeight, list } = this.state;
+    const { roomInfo, safeHeight, posts, result } = this.state;
+    console.log(posts)
     return (
       <View className='index'>
         {roomInfo && (
@@ -138,31 +199,33 @@ export default class Index extends Component<any, {
               <Text>{roomInfo.description}</Text>
             </View>
             <View className="posts">
-              {roomInfo.posts.map((post, index) => <PostItem key={post.author + index} post={post} />)}
+              <View className="postScrollBox">
+                {roomInfo.posts.map((post, index) => <PostItem key={post.author + index} post={post} />)}
+              </View>
             </View>
-            <View className="inputBox">
-              <Input type='text' placeholder='最大输入长度为 10' />
-              <Button className="send" onClick={this.handleSend}> </Button>
+            <View className="form">
+              {posts.map((post, i) => (
+                <FormBox
+                  key={post.text}
+                  index={i}
+                  onConfirm={() => {
+                    this.handleSend()
+                  }}
+                />
+              ))}
+              <Button onClick={this.handleAdd} className="secondary">添加</Button>
             </View>
-            <View className="typeBox">
-              {list.map((item, i) => {
-                return (
-                  <Label className='checkbox-list__label' for={i} key={i}>
-                    <Checkbox className='checkbox-list__checkbox' value={item.value} checked={item.checked}>{item.text}</Checkbox>
-                  </Label>
-                )
-              })}
-            </View>
+
             <View className="generator">
               <View className="main">
-                {roomInfo && this.generate().map(para => (
+                {result.length && result.map(para => (
                   <View className="para"><Text>{para}</Text></View>
                 ))}
               </View>
             </View>
             <View style={{ paddingBottom: safeHeight }} className="bottomMenu">
-              <Button className="primary" openType="share" >邀请</Button>
-              <Button className="secondary" openType="share" >分享</Button>
+              <Button className="primary" openType="share" >邀请好友创作</Button>
+              <Button className="secondary" openType="share" >分享作品</Button>
             </View>
           </View>
         )}
